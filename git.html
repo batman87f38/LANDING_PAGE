@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Event Certificates</title>
+    <style>
+        /* ========== GENERAL PAGE STYLING ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ========== HEADER STYLING ========== */
+        /* CUSTOMIZE: Change the main title text color and size here */
+        h1 {
+            text-align: center;
+            color: #003d82;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        /* CUSTOMIZE: Change the subtitle (Faculty) styling here */
+        h2 {
+            text-align: center;
+            color: #666;
+            font-size: 1.5em;
+            font-weight: normal;
+            margin-bottom: 30px;
+        }
+
+        /* ========== TABLE STYLING ========== */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        /* CUSTOMIZE: Table header background color */
+        thead {
+            background-color: #003d82;
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* CUSTOMIZE: Table row styling */
+        tbody tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* CUSTOMIZE: Alternating row colors (optional) */
+        tbody tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+
+        td {
+            padding: 12px 15px;
+            color: #333;
+        }
+
+        /* ========== DOWNLOAD LINK STYLING ========== */
+        /* CUSTOMIZE: Change download link appearance here */
+        .download-link {
+            color: #0066cc;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .download-link:hover {
+            color: #004499;
+        }
+
+        /* ========== RESPONSIVE DESIGN ========== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            h2 {
+                font-size: 1.2em;
+            }
+
+            th, td {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ========== HEADER SECTION ========== -->
+        <!-- CUSTOMIZE: Change the title and subtitle text below -->
+        <h1 id="mainTitle">UI/UX Assignment</h1>
+        <h2 id="subtitle">Faculty of Computer Science</h2>
+
+        <!-- ========== TABLE SECTION ========== -->
+        <div class="table-wrapper">
+            <table id="certificateTable">
+                <!-- TABLE HEADER -->
+                <!-- CUSTOMIZE: Change column names here if needed -->
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Student Name</th>
+                        <th>Class</th>
+                        
+                        <th>Download page</th>
+                    </tr>
+                </thead>
+                
+                <!-- TABLE BODY -->
+                <!-- This will be filled dynamically by JavaScript -->
+                <tbody id="tableBody">
+                    <!-- Data will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // ========================================================================
+        // STUDENT DATA ARRAY
+        // ========================================================================
+        // CUSTOMIZE: Add your student records here
+        // Each object represents one student record with the following fields:
+        // - sno: Serial number (e.g., "LMC001")
+        // - name: Student's full name (e.g., "BHAVYA")
+        // - className: Class/Year (e.g., "BCA I", "BCA III")
+        // - event: Event name (e.g., "Mini Hackathon")
+        // - certificateUrl: Link to the certificate PDF (optional, can be "#" for placeholder)
+        
+        const studentData = [
+            {
+                rollno: "243501153",
+                name: "PRANAY",
+                className: "BCA A1",
+                event: "Mini Hackathon",
+                certificateUrl: "https://www.figma.com/make/2Jqx7HyTiLTcRx0AW1rANz/Landing-page?p=f&t=jul98gfeXo9IJCPn-0&fullscreen=1"  // Replace with actual certificate URL
+            },
+            {
+                rollno: "243501212",
+                name: "VIKRAM",
+                className: "BCA I",
+                event: "Mini Hackathon",
+                certificateUrl: "https://www.figma.com/make/2Jqx7HyTiLTcRx0AW1rANz/Landing-page?p=f&t=jul98gfeXo9IJCPn-0&fullscreen=1"  // Replace with actual certificate URL
+            }
+            
+            // ========== ADD MORE STUDENTS HERE ==========
+            // Copy the format above and add more student objects
+            // Example:
+            // {
+            //     sno: "LMC011",
+            //     name: "YOUR NAME",
+            //     className: "BCA I",
+            //     event: "Your Event",
+            //     certificateUrl: "path/to/certificate.pdf"
+            // },
+        ];
+
+        // ========================================================================
+        // FUNCTION TO POPULATE TABLE
+        // ========================================================================
+        // This function reads the studentData array and creates table rows
+        function populateTable() {
+            const tableBody = document.getElementById('tableBody');
+            
+            // Clear existing content (if any)
+            tableBody.innerHTML = '';
+            
+            // Loop through each student in the data array
+            studentData.forEach((student) => {
+                // Create a new table row
+                const row = document.createElement('tr');
+                
+                // Build the HTML for this row
+                // Each ${} inserts data from the student object
+                row.innerHTML = `
+                    <td>${student.rollno}</td>
+                    <td>${student.name}</td>
+                    <td>${student.className}</td>
+                    
+
+                    <td>
+                        <a href="${student.certificateUrl}" 
+                           class="download-link" 
+                           onclick="handleDownload('${student.name}', '${student.certificateUrl}'); return false;">
+                            VIEW LANDING PAGE
+                        </a>
+                    </td>
+                `;
+                
+                // Add the row to the table body
+                tableBody.appendChild(row);
+            });
+        }
+
+        // ========================================================================
+        // DOWNLOAD HANDLER FUNCTION
+        // ========================================================================
+        // CUSTOMIZE: Modify this function to handle certificate downloads
+        // Currently shows an alert - you can replace with actual download logic
+        function handleDownload(studentName, certificateUrl) {
+    if (certificateUrl === "#" || certificateUrl === "") {
+        alert(`Landing page for ${studentName} is not available yet.`);
+    } else {
+        // ADD THIS LINE ✅
+        window.open(certificateUrl, '_blank');
+    }
+}
+
+        // ========================================================================
+        // ADDITIONAL CUSTOMIZATION FUNCTIONS (OPTIONAL)
+        // ========================================================================
+
+        // Function to update the main title
+        function updateTitle(newTitle) {
+            document.getElementById('mainTitle').textContent = newTitle;
+        }
+
+        // Function to update the subtitle
+        function updateSubtitle(newSubtitle) {
+            document.getElementById('subtitle').textContent = newSubtitle;
+        }
+
+        // Function to search/filter the table
+        function searchTable(searchTerm) {
+            const rows = document.querySelectorAll('#tableBody tr');
+            searchTerm = searchTerm.toLowerCase();
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // ========================================================================
+        // INITIALIZE THE TABLE WHEN PAGE LOADS
+        // ========================================================================
+        // This runs automatically when the page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            populateTable();
+        });
+
+        // ========================================================================
+        // EXAMPLE USAGE (commented out - uncomment to use)
+        // ========================================================================
+        // updateTitle("New Session 2025-2026");
+        // updateSubtitle("Faculty of Engineering");
+        // searchTable("BHAVYA");  // Filter table by search term
+    </script>
+</body>
+</html>
